@@ -29,13 +29,13 @@ button {
     grid-template-columns: repeat(3, 1fr);
     justify-content: center;
     gap: 30px;
-    
+
 }
 
 .item {
     display: flex;
     flex-direction: column;
-    min-height: 300px;
+    min-height: 500px;
     background: #dedddd;
     padding: 10px 15px;
 }
@@ -152,7 +152,7 @@ h1 {
 }
 
 .popup {
-    display: flex;
+    display: none;
     flex-direction: column;
     gap: 10px;
 }
@@ -186,6 +186,6 @@ h1 {
     padding: 10px;
     box-sizing: border-box;
     border-radius: 7px;
-    border: 1px solid #333; 
+    border: 1px solid #333;
     outline: none;
 }
