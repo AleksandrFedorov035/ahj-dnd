@@ -35,6 +35,7 @@ button {
 .item {
     display: flex;
     flex-direction: column;
+    gap: 10px;
     min-height: 500px;
     background: #dedddd;
     padding: 10px 15px;
@@ -44,7 +45,6 @@ h1 {
     color: rgb(8, 94, 94);
     font-size: 20px;
     text-transform: uppercase;
-    margin-bottom: 10px;
 }
 
 .top-content {
@@ -70,7 +70,8 @@ h1 {
     position: relative;
 }
 
-.menu-item::before, .menu-item::after {
+.menu-item::before,
+.menu-item::after {
     content: "";
     background: #333;
     width: 100%;
@@ -96,9 +97,14 @@ h1 {
 .element {
     display: flex;
     justify-content: space-between;
+    position: relative;
     background-color: #fff;
     padding: 10px;
     border-radius: 7px;
+}
+
+.element:hover {
+    cursor: grabbing;
 }
 
 .close {
@@ -109,16 +115,23 @@ h1 {
     background: #dedddd;
     height: fit-content;
     padding: 7px;
-    position: relative;
-    top: -10px;
-    left: 10px;
+    position: absolute;
+    right: 0;
+    top: 0px;
 }
 
 .element:hover .close {
     display: block;
 }
 
-.close-element, .popup-close-element {
+.element.dragged {
+    position: absolute;
+    z-index: 999;
+    pointer-events: none;
+}
+
+.close-element,
+.popup-close-element {
     display: block;
     background: #333;
     width: 10px;
@@ -128,7 +141,8 @@ h1 {
     transform: rotate(-135deg);
 }
 
-.close-element::before, .popup-close-element::before {
+.close-element::before,
+.popup-close-element::before {
     content: "";
     background: #333;
     width: 100%;
@@ -175,10 +189,6 @@ h1 {
 
 .popup-close-element {
     width: 15px;
-}
-
-.popup-menu {
-    margin-left: auto;
 }
 
 .input-addcard {
