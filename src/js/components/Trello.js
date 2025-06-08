@@ -12,10 +12,19 @@ export default class Trello {
         this.shiftX = 0;
         this.shiftY = 0;
 
+        this.inputFieldHandler = null;
+        this.buttonClickHandler = null;
+
+        this.actualElement;
+
         this.showForm = this.showForm.bind(this);
         this.container.addEventListener('click', e => {
             if (e.target.classList.contains('add-card')) {
+<<<<<<< HEAD
                 e.target.style.display = "none";
+=======
+                e.target.style.display = "none"
+>>>>>>> 7311bbe06547da9b894c9ffdf7ca2da8eba70ee1
                 this.showForm(e);
             }
         });
@@ -126,6 +135,7 @@ export default class Trello {
     }
 
     onMouseDown(e) {
+<<<<<<< HEAD
         e.preventDefault()
         console.log('onMouseDown:', e.currentTarget);
         this.actualElement = e.currentTarget;
@@ -198,6 +208,28 @@ export default class Trello {
 
         // Обнуляем ссылку на элемент
         this.actualElement = null;
+=======
+        this.actualElement = e.target;
+
+        this.actualElement.classList.add("dragged")
+
+        document.documentElement.addEventListener('mouseup', e => this.onMouseUp(e));
+        document.documentElement.addEventListener('mouseover', e => this.onMouseOver(e));
+    }
+
+    onMouseUp(e) {
+        const mouseUpItem = e.target;
+
+        this.actualElement.classList.remove('dragged');
+
+        document.documentElement.removeEventListener('mouseup', e => this.onMouseUp(e));
+        document.documentElement.removeEventListener('mouseover', e => this.onMouseOver(e));
+    }
+
+    onMouseOver(e) {
+        this.actualElement.style.top = e.clientY + 'px';
+        this.actualElement.style.left = e.clientX + 'px';
+>>>>>>> 7311bbe06547da9b894c9ffdf7ca2da8eba70ee1
     }
 
 }
