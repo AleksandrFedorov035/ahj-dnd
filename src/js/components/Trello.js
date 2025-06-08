@@ -2,7 +2,6 @@ export default class Trello {
     constructor(container) {
         this.container = container;
 
-        // Привяжем методы к экземпляру класса
         this.onMouseDown = this.onMouseDown.bind(this);
         this.onMouseMove = this.onMouseMove.bind(this);
         this.onMouseUp = this.onMouseUp.bind(this);
@@ -136,47 +135,38 @@ export default class Trello {
         console.log('onMouseDown:', e.currentTarget);
         this.actualElement = e.currentTarget;
 
-        // Создание placeholder
         this.placeholder = document.createElement('div');
         this.placeholder.classList.add("placeholder")
         const rect = this.actualElement.getBoundingClientRect();
         this.placeholder.style.height = rect.height + "px"
         this.actualElement.parentNode.insertBefore(this.placeholder, this.actualElement.nextSibling);
 
-        // Получаем начальное положение мыши относительно элемента
         this.shiftX = e.clientX - rect.left;
         this.shiftY = e.clientY - rect.top;
 
-        // Меняем позицию карты на абсолютную
         this.actualElement.style.position = 'absolute';
-        this.actualElement.style.zIndex = 1000;  // Поднимаем карту вверх
+        this.actualElement.style.zIndex = 1000;
         this.actualElement.style.left = `${e.clientX - this.shiftX}px`;
         this.actualElement.style.top = `${e.clientY - this.shiftY}px`;
 
-        // Переносим карточку в body для свободного перемещения
         document.body.appendChild(this.actualElement);
 
-        // Устанавливаем глобальные события
         document.addEventListener('mousemove', this.onMouseMove);
         document.addEventListener('mouseup', this.onMouseUp);
     }
 
     onMouseMove(e) {
         console.log('onMouseMove:', e.clientX, e.clientY);
-        // Позиция карточки за курсором
+
         this.actualElement.style.left = `${e.clientX - this.shiftX}px`;
         this.actualElement.style.top = `${e.clientY - this.shiftY}px`;
 
-        // Определяем колонку под курсором
         let targetElement = document.elementFromPoint(e.clientX, e.clientY);
-        if (!targetElement) return; // Если элемент не найден, прекращаем работу
+        if (!targetElement) return;
 
         let targetColumn = targetElement.closest(".main-content");
-        console.log("Target column:", targetColumn);
+        if (!targetColumn) return;
 
-        if (!targetColumn || !targetColumn.classList.contains('main-content')) return;
-
-        // Проверяем, поменялась ли колонка
         if (this.placeholder && this.placeholder.parentNode !== targetColumn) {
             targetColumn.appendChild(this.placeholder);
         }
@@ -184,17 +174,17 @@ export default class Trello {
 
     onMouseUp(e) {
         console.log('onMouseUp:', e.clientX, e.clientY);
-        // Очищаем событие
+
+
         document.removeEventListener('mousemove', this.onMouseMove);
         document.removeEventListener('mouseup', this.onMouseUp);
 
-        // Возвращаем карточку в исходный поток
+
         this.actualElement.style.position = '';
         this.actualElement.style.left = '';
         this.actualElement.style.top = '';
         this.actualElement.style.zIndex = '';
 
-        // Удаляем placeholder
         if (this.placeholder) {
             const parentColumn = this.placeholder.parentNode;
             parentColumn.insertBefore(this.actualElement, this.placeholder);
@@ -202,13 +192,6 @@ export default class Trello {
             this.placeholder = null;
         }
 
-        // Обнуляем ссылку на элемент
         this.actualElement = null;
-        this.actualElement = e.target;
-
-        this.actualElement.classList.add("dragged")
-
-        document.documentElement.addEventListener('mouseup', e => this.onMouseUp(e));
-        document.documentElement.addEventListener('mouseover', e => this.onMouseOver(e));
     }
 }
