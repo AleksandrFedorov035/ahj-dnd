@@ -211,19 +211,4 @@ export default class Trello {
         document.documentElement.addEventListener('mouseup', e => this.onMouseUp(e));
         document.documentElement.addEventListener('mouseover', e => this.onMouseOver(e));
     }
-
-    onMouseUp(e) {
-        const mouseUpItem = e.target;
-
-        this.actualElement.classList.remove('dragged');
-
-        document.documentElement.removeEventListener('mouseup', e => this.onMouseUp(e));
-        document.documentElement.removeEventListener('mouseover', e => this.onMouseOver(e));
-    }
-
-    onMouseOver(e) {
-        this.actualElement.style.top = e.clientY + 'px';
-        this.actualElement.style.left = e.clientX + 'px';
-    }
-
 }
