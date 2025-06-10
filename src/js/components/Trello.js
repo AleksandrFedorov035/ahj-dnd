@@ -168,6 +168,7 @@ export default class Trello {
     this.shiftY = e.clientY - rect.top;
 
     this.actualElement.style.position = "absolute";
+    this.actualElement.style.pointerEvents = "none";
     this.actualElement.style.zIndex = 1000;
     this.actualElement.style.left = `${e.clientX - this.shiftX}px`;
     this.actualElement.style.top = `${e.clientY - this.shiftY}px`;
@@ -205,6 +206,7 @@ export default class Trello {
     this.actualElement.style.left = "";
     this.actualElement.style.top = "";
     this.actualElement.style.zIndex = "";
+    this.actualElement.style.pointerEvents = "";
 
     if (this.placeholder) {
       const parentColumn = this.placeholder.parentNode;
