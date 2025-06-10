@@ -36,7 +36,6 @@ button {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    min-height: 500px;
     background: #dedddd;
     padding: 10px 15px;
 }
@@ -92,6 +91,8 @@ h1 {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    max-width: 550px;
+    min-height: 400px;
 }
 
 .element {
@@ -198,4 +199,9 @@ h1 {
     border-radius: 7px;
     border: 1px solid #333;
     outline: none;
+}
+
+.placeholder {
+    border: 1px solid #333;
+    border-radius: 7px;
 }

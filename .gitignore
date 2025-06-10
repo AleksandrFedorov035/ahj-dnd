@@ -1,6 +1,6 @@
 dist
 doc
-
+package-lock.json
 # Logs
 logs
 *.log
