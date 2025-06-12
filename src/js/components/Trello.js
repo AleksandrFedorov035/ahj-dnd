@@ -17,10 +17,10 @@ export default class Trello {
         this.actualElement;
 
         this.showForm = this.showForm.bind(this);
-        this.container.addEventListener('click', e => {
-            if (e.target.classList.contains('add-card')) {
+        this.container.addEventListener("click", (e) => {
+            if (e.target.classList.contains("add-card")) {
                 e.target.style.display = "none";
-                e.target.style.display = "none"
+                e.target.style.display = "none";
                 this.showForm(e);
             }
         });
@@ -29,8 +29,9 @@ export default class Trello {
     renderHTML() {
         return `
             <div class="trello">
-            ${['TODO', 'In Progress', 'DONE'].map(status => {
-            return `
+            ${["TODO", "In Progress", "DONE"]
+                .map((status) => {
+                    return `
                 <div class="item">
                     <div class="top-content">
                         <h1>${status}</h1>
@@ -51,13 +52,14 @@ export default class Trello {
                             </div>
                         </div>
                     </div>
-                </div>`
-        }).join('')}
-        `
+                </div>`;
+                })
+                .join("")}
+        `;
     }
 
     renderItemsToContainer() {
-        this.container.insertAdjacentHTML("beforeend", this.renderHTML())
+        this.container.insertAdjacentHTML("beforeend", this.renderHTML());
     }
 
     renderCard(text) {
@@ -68,95 +70,116 @@ export default class Trello {
                         <div class="close-element"></div>
                     </div>
             </div>
-        `
+        `;
     }
 
     showForm(e) {
-        const item = e.target.closest(".item")
-        const popup = item.querySelector(".popup")
-        popup.style.display = "flex"
+        const item = e.target.closest(".item");
+        const popup = item.querySelector(".popup");
+        popup.style.display = "flex";
 
-        if (this.inputFieldHandler) popup.querySelector(".input-addcard").removeEventListener('keyup', this.inputFieldHandler);
-        if (this.buttonClickHandler) popup.querySelector("button").removeEventListener('click', this.buttonClickHandler);
+        if (this.inputFieldHandler)
+            popup
+                .querySelector(".input-addcard")
+                .removeEventListener("keyup", this.inputFieldHandler);
+        if (this.buttonClickHandler)
+            popup
+                .querySelector("button")
+                .removeEventListener("click", this.buttonClickHandler);
 
-        this.inputFieldHandler = e => {
+        this.inputFieldHandler = (e) => {
             if (e.code === "Enter") {
                 this.addCardToHTML(item);
             }
-        }
+        };
         this.buttonClickHandler = () => this.addCardToHTML(item);
 
-        popup.querySelector(".popup-close").addEventListener("click", () => this.closeForm(item))
-        popup.querySelector("button").addEventListener('click', this.buttonClickHandler)
-        popup.querySelector(".input-addcard").addEventListener('keyup', this.inputFieldHandler)
+        popup
+            .querySelector(".popup-close")
+            .addEventListener("click", () => this.closeForm(item));
+        popup
+            .querySelector("button")
+            .addEventListener("click", this.buttonClickHandler);
+        popup
+            .querySelector(".input-addcard")
+            .addEventListener("keyup", this.inputFieldHandler);
     }
 
     closeForm(item) {
-        item.querySelector(".popup").style.display = "none"
-        item.querySelector(".add-card").style.display = "block"
-        item.querySelector(".input-addcard").value = ""
+        item.querySelector(".popup").style.display = "none";
+        item.querySelector(".add-card").style.display = "block";
+        item.querySelector(".input-addcard").value = "";
     }
 
     addCardToHTML(item) {
-        const value = item.querySelector(".input-addcard").value.trim()
-        if (!value) return
+        const value = item.querySelector(".input-addcard").value.trim();
+        if (!value) return;
 
-        const mainContent = item.querySelector(".main-content")
+        const mainContent = item.querySelector(".main-content");
 
         const existingCards = Array.from(mainContent.children);
-        const duplicateFound = existingCards.some(card => card.querySelector('p').innerText === value);
-        const error = item.querySelector(".errorMessage")
+        const duplicateFound = existingCards.some(
+            (card) => card.querySelector("p").innerText === value,
+        );
+        const error = item.querySelector(".errorMessage");
         if (duplicateFound) {
-            if (error) return
-            const errorMessage = '<p style="color: red;" class="errorMessage">Карточка с таким текстом уже существует!</p>';
-            item.querySelector(".popup").insertAdjacentHTML("afterbegin", errorMessage);
-            return
+            if (error) return;
+            const errorMessage =
+                '<p style="color: red;" class="errorMessage">Карточка с таким текстом уже существует!</p>';
+            item
+                .querySelector(".popup")
+                .insertAdjacentHTML("afterbegin", errorMessage);
+            return;
         }
-        if (error) error.remove()
+        if (error) error.remove();
 
+        const newElement = this.renderCard(value);
+        mainContent.insertAdjacentHTML("beforeend", newElement);
 
-        const newElement = this.renderCard(value)
-        mainContent.insertAdjacentHTML("beforeend", newElement)
+        item.querySelector(".input-addcard").value = ''
 
         const lastAddedCard = mainContent.lastElementChild;
-        lastAddedCard.querySelector('.close').addEventListener('click', () => this.removeCard(lastAddedCard))
-        lastAddedCard.addEventListener("mousedown", e => {
-            if (e.target != lastAddedCard.querySelector('.close')) this.onMouseDown(e)
-        })
-
+        lastAddedCard
+            .querySelector(".close")
+            .addEventListener("click", () => this.removeCard(lastAddedCard));
+        lastAddedCard.addEventListener("mousedown", (e) => this.onMouseDown(e));
     }
 
     removeCard(element) {
-        element.remove()
+        element.remove();
     }
 
     onMouseDown(e) {
-        e.preventDefault()
-        console.log('onMouseDown:', e.currentTarget);
+        e.preventDefault();
+        console.log("onMouseDown:", e.currentTarget);
+        if (e.target.classList.contains("close")) return
+
         this.actualElement = e.currentTarget;
 
-        this.placeholder = document.createElement('div');
-        this.placeholder.classList.add("placeholder")
+        this.placeholder = document.createElement("div");
+        this.placeholder.classList.add("placeholder");
         const rect = this.actualElement.getBoundingClientRect();
-        this.placeholder.style.height = rect.height + "px"
-        this.actualElement.parentNode.insertBefore(this.placeholder, this.actualElement.nextSibling);
+        this.placeholder.style.height = rect.height + "px";
+        this.actualElement.parentNode.insertBefore(
+            this.placeholder,
+            this.actualElement.nextSibling,
+        );
 
         this.shiftX = e.clientX - rect.left;
         this.shiftY = e.clientY - rect.top;
 
-        this.actualElement.style.position = 'absolute';
-        this.actualElement.style.zIndex = 1000;
+        this.actualElement.classList.add("dragged")
         this.actualElement.style.left = `${e.clientX - this.shiftX}px`;
         this.actualElement.style.top = `${e.clientY - this.shiftY}px`;
 
         document.body.appendChild(this.actualElement);
 
-        document.addEventListener('mousemove', this.onMouseMove);
-        document.addEventListener('mouseup', this.onMouseUp);
+        document.addEventListener("mousemove", this.onMouseMove);
+        document.addEventListener("mouseup", this.onMouseUp);
     }
 
     onMouseMove(e) {
-        console.log('onMouseMove:', e.clientX, e.clientY);
+        console.log("onMouseMove:", e.clientX, e.clientY);
 
         this.actualElement.style.left = `${e.clientX - this.shiftX}px`;
         this.actualElement.style.top = `${e.clientY - this.shiftY}px`;
@@ -173,17 +196,14 @@ export default class Trello {
     }
 
     onMouseUp(e) {
-        console.log('onMouseUp:', e.clientX, e.clientY);
+        console.log("onMouseUp:", e.clientX, e.clientY);
 
+        document.removeEventListener("mousemove", this.onMouseMove);
+        document.removeEventListener("mouseup", this.onMouseUp);
 
-        document.removeEventListener('mousemove', this.onMouseMove);
-        document.removeEventListener('mouseup', this.onMouseUp);
-
-
-        this.actualElement.style.position = '';
-        this.actualElement.style.left = '';
-        this.actualElement.style.top = '';
-        this.actualElement.style.zIndex = '';
+        this.actualElement.classList.remove("dragged")
+        this.actualElement.style.left = "";
+        this.actualElement.style.top = "";
 
         if (this.placeholder) {
             const parentColumn = this.placeholder.parentNode;

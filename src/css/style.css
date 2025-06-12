@@ -36,7 +36,6 @@ button {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    min-height: 500px;
     background: #dedddd;
     padding: 10px 15px;
 }
@@ -93,6 +92,7 @@ h1 {
     flex-direction: column;
     gap: 10px;
     max-width: 550px;
+    min-height: 400px;
 }
 
 .element {
@@ -104,7 +104,7 @@ h1 {
     border-radius: 7px;
 }
 
-.element:hover {
+.element:hover, .element.dragged {
     cursor: grabbing;
 }
 
@@ -125,15 +125,14 @@ h1 {
     display: block;
 }
 
-<<<<<<< HEAD
-=======
-.element.dragged {
+.dragged {
     position: absolute;
-    z-index: 999;
     pointer-events: none;
+    z-index: 1000;
+    width: 350px;
+    opacity: 0.8;
 }
 
->>>>>>> 7311bbe06547da9b894c9ffdf7ca2da8eba70ee1
 .close-element,
 .popup-close-element {
     display: block;
@@ -202,13 +201,9 @@ h1 {
     border-radius: 7px;
     border: 1px solid #333;
     outline: none;
-<<<<<<< HEAD
 }
 
 .placeholder {
     border: 1px solid #333;
     border-radius: 7px;
 }
-=======
-}
->>>>>>> 7311bbe06547da9b894c9ffdf7ca2da8eba70ee1
