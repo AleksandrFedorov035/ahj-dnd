@@ -184,11 +184,20 @@ export default class Trello {
         this.actualElement.style.left = `${e.clientX - this.shiftX}px`;
         this.actualElement.style.top = `${e.clientY - this.shiftY}px`;
 
-        let targetElement = document.elementFromPoint(e.clientX, e.clientY);
-        if (!targetElement) return;
+        this.actualElement.hidden = true;
+        let targetElement = document.elementFromPoint(e.clientX, e.clientY); if (!targetElement) return;
+        this.actualElement.hidden = false;
+        let targetColumn = targetElement.closest(".main-content"); if (!targetColumn) return;
 
-        let targetColumn = targetElement.closest(".main-content");
-        if (!targetColumn) return;
+        if (targetElement.classList.contains("element")) {
+            const rect = targetElement.getBoundingClientRect()
+            const middleY = rect.top + rect.height / 2;
+            if (e.clientY > middleY) {
+                targetColumn.insertBefore(this.placeholder, targetElement)
+            } else {
+                targetColumn.insertBefore(this.placeholder, targetElement.nextSibling)
+            }
+        }
 
         if (this.placeholder && this.placeholder.parentNode !== targetColumn) {
             targetColumn.appendChild(this.placeholder);
@@ -206,9 +215,8 @@ export default class Trello {
         this.actualElement.style.top = "";
 
         if (this.placeholder) {
-            const parentColumn = this.placeholder.parentNode;
-            parentColumn.insertBefore(this.actualElement, this.placeholder);
-            parentColumn.removeChild(this.placeholder);
+            this.placeholder.parentNode.insertBefore(this.actualElement, this.placeholder);
+            this.placeholder.parentNode.removeChild(this.placeholder);
             this.placeholder = null;
         }
 
